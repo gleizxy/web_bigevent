@@ -1,6 +1,5 @@
 $(function () {
     getUserInfo()
-
     var layer = layui.layer
     // 点击按钮，实现退出功能
     $('#btnLogout').on('click', function () {
@@ -15,8 +14,8 @@ $(function () {
             layer.close(index)
         })
     })
-
 })
+
 // 获取用户的基本信息
 function getUserInfo() {
     $.ajax({
@@ -32,7 +31,7 @@ function getUserInfo() {
             }
             // 调用 renderAvatar 渲染用户的头像
             renderAvatar(res.data)
-        },
+        }
         // 控制用户的访问权限,不论成功还是失败，最终都会调用 complete 回调函数
         // complete: function (res) {
         //     // console.log('执行了 complete 回调：')
@@ -70,3 +69,7 @@ function renderAvatar(user) {
             .show()
     }
 }
+
+
+
+
