@@ -52,9 +52,9 @@ $(function () {
 
     //拿到裁剪后的图片,然后再调用接口上传,更新头像
     //拿裁剪后的图片也是用cropper里的方法
-    $('.layui-btn-danger').on('click', function () {
+    $('#btnUpload').on('click', function () {
         console.log(11);
-
+        //拿到用户裁剪后的图片
         var dataURL = $image
             .cropper('getCroppedCanvas', {
                 // 创建一个 Canvas 画布
@@ -63,7 +63,7 @@ $(function () {
             })
             .toDataURL('image/png')
         console.log(dataURL);
-
+        //将裁剪后的图片上传
         $.ajax({
             method: 'POST',
             url: '/my/update/avatar',
@@ -71,6 +71,7 @@ $(function () {
                 avatar: dataURL
             },
             success: function (res) {
+                console.log(res);
                 if (res.status !== 0) {
                     return layer.msg('更换头像失败！')
                 }
