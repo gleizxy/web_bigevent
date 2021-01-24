@@ -3,10 +3,26 @@
 $(function () {
     var layer = layui.layer
     var form = layui.form
+    var nowId = window.location.search.slice(4,)
+    console.log(nowId);
+    if (nowId != '') {
+        $.ajax({
+            type: 'get',
+            url: '/my/article/' + nowId,
+            success: function (res) {
+                console.log(res);
+                form.val('form-pub', res.data)
+                // $('#image').attr('src',res.data.cover_img)
+            }
+        })
+
+    };
+
+
+
     // 初始化富文本编辑器
     initEditor()
     initCate()
-
     // 定义加载文章分类的方法
     function initCate() {
         $.ajax({
@@ -59,6 +75,7 @@ $(function () {
         }
         // 根据文件，创建对应的 URL 地址
         var newImgURL = URL.createObjectURL(files[0])
+        console.log(newImgURL);
         // 为裁剪区域重新设置图片
         $image
             .cropper('destroy') // 销毁旧的裁剪区域
@@ -88,10 +105,10 @@ $(function () {
         e.preventDefault()
         // 2. 基于 form 表单，快速创建一个 FormData 对象
         var fd = new FormData($(this)[0])
-        console.log(fd);
         // 3. 将文章的发布状态，存到 fd 中
         fd.append('state', art_state)
         // 4. 将封面裁剪过后的图片，输出为一个文件对象
+        
         $image
             .cropper('getCroppedCanvas', {
                 // 创建一个 Canvas 画布
@@ -104,32 +121,62 @@ $(function () {
                 // 5. 将文件对象，存储到 fd 中
                 fd.append('cover_img', blob)
                 // 6. 发起 ajax 数据请求
-                publishArticle(fd)
+
+                if (nowId != '') {
+                    fd.append('Id', nowId)
+                    modifyArticle(fd)
+
+                } else {
+                    publishArticle(fd)
+                }
+
             })
+
+
     })
 
 
     //发布文章的方法publishArticle
     function publishArticle(fd) {
         $.ajax({
-          method: 'POST',
-          url: '/my/article/add',
-          data: fd,
-          // 注意：如果向服务器提交的是 FormData 格式的数据，
-          // 必须添加以下两个配置项
-          contentType: false,
-          processData: false,
-          success: function(res) {
-            if (res.status !== 0) {
-              return layer.msg('发布文章失败！')
+            method: 'POST',
+            url: '/my/article/add',
+            data: fd,
+            // 注意：如果向服务器提交的是 FormData 格式的数据，
+            // 必须添加以下两个配置项
+            contentType: false,
+            processData: false,
+            success: function (res) {
+                if (res.status !== 0) {
+                    return layer.msg('发布文章失败！')
+                }
+                layer.msg('发布文章成功！')
+                // 发布文章成功后，跳转到文章列表页面
+                location.href = '/article/art_list.html'
             }
-            layer.msg('发布文章成功！')
-            // 发布文章成功后，跳转到文章列表页面
-            location.href = '/article/art_list.html'
-          }
         })
     }
 
+
+    //修改文章的方法modifyArticle
+    function modifyArticle(fd) {
+        $.ajax({
+            type: 'post',
+            url: '/my/article/edit',
+            data: fd,
+            contentType: false,
+            processData: false,
+            success: function (res) {
+                // console.log(res);
+                if (res.status !== 0) {
+                    return layer.msg('修改文章失败！')
+                }
+                layer.msg('修改文章成功！')
+                // 发布文章成功后，跳转到文章列表页面
+                location.href = '/article/art_list.html'
+            }
+        })
+    }
 
 
 

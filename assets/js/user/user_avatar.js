@@ -53,7 +53,6 @@ $(function () {
     //拿到裁剪后的图片,然后再调用接口上传,更新头像
     //拿裁剪后的图片也是用cropper里的方法
     $('#btnUpload').on('click', function () {
-        console.log(11);
         //拿到用户裁剪后的图片
         var dataURL = $image
             .cropper('getCroppedCanvas', {
@@ -62,8 +61,8 @@ $(function () {
                 height: 100
             })
             .toDataURL('image/png')
-        console.log(dataURL);
-        //将裁剪后的图片上传
+        // console.log(dataURL);
+        将裁剪后的图片上传
         $.ajax({
             method: 'POST',
             url: '/my/update/avatar',

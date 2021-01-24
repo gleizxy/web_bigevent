@@ -17,7 +17,27 @@
         <div class="layui-card-body"></div>
     </div>
 
+
+
     <!-- 筛选区域 -->
+    <form class="layui-form" id="form-search">
+        <div class="layui-form-item layui-inline">
+            <select name="cate_id"></select>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <!-- 注意这里的select的name是查询参数的属性state,里面的option里的value值才
+                是查询参数的属性注意这里的select的name是查询参数的属性state的属性值 -->
+            <select name="state">
+                <option value="">所有状态</option>
+                <option value="已发布">已发布</option>
+                <option value="草稿">草稿</option>
+            </select>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <button class="layui-btn" lay-submit lay-filter="formDemo">筛选</button>
+        </div>
+    </form>
+
 
 
     <!-- 列表区域 -->
@@ -46,23 +66,39 @@
 
 
     <!-- 分页区域 -->
+<div  id="pageBox">
 
-    <!-- 模板引擎 -->
+</div> 
+
+ 
+
+    <!-- 列表数据的模板引擎 -->
     <script type="text/html" id="tpl-table">
         {{each data}}
         <tr>
             <td>{{$value.title}}</td>
             <td>{{$value.cate_name}}</td>
-            <td>{{$value.pub_date}}</td>
+            <td>{{$value.pub_date|dataFormat}}</td>
             <td>{{$value.state}}</td>
             <td>
-                <button type="button" class="layui-btn layui-btn-xs">编辑</button>
-                <button type="button" class="layui-btn layui-btn-danger layui-btn-xs">删除</button>
+                <button type="button" class="layui-btn layui-btn-xs btn-modify" data-id="{{$value.Id}}">编辑</button>
+                <button type="button" class="layui-btn layui-btn-danger layui-btn-xs btn-delete" data-id="{{$value.Id}}">删除</button>
             </td>
         </tr>
         {{/each}}
 
     </script>
+
+    <!-- 文章分类的下拉列表的模板引擎 -->
+    <script type="text/html" id="tpl-cate">
+        <option value="">所有分类</option>
+        {{each data}}
+        <!-- 注意这个的value是这个类别的id,id是作为属性值给到查询参数,方便后面做查询的 -->
+        <option value="{{$value.Id}}">{{$value.name}}</option>
+        {{/each}}
+
+    </script>
+
 
 
 
