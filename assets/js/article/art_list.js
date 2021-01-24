@@ -24,6 +24,7 @@ $(function () {
                 }
                 // 使用模板引擎渲染页面的数据
                 var htmlStr = template('tpl-table', res)
+                // console.log(htmlStr);
                 $('tbody').html(htmlStr)
             }
         })
